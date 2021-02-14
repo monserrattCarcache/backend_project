@@ -1,6 +1,6 @@
 
 @extends('base')
-@section('title') Inicio @endsection
+@section('title') Post @endsection
 @section('content')
     <table class="table">
         <thead>
