@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -16,6 +17,17 @@ class PostController extends Controller
     {
         $data['posts'] = Post::paginate(5);
         return view("post.index", $data);
+    }
+
+    public function search(Request $request)
+    {
+        $data = $request->input('search');
+        $query = Post::select()
+        ->where('title','like',"%$data%")
+        ->orWhere('author','like',"%$data%")
+        ->get();
+       // $data['posts'] = Post::paginate(5);
+        return view("post.index")->with(["posts" => $query]) ;
     }
 
     /**
@@ -36,7 +48,15 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //$data = $request->all();
+        $data = $request->except('_token');
+        if ($request->hasFile('image')){
+            $data['image'] = $request->file('image')->store('uplpads','public');
+        }
+        //var_dump($data);
+        Post::insert($data);
+        return redirect()->route("post.index");
+        //die();
     }
 
     /**
@@ -56,9 +76,10 @@ class PostController extends Controller
      * @param  \App\post  $post
      * @return \Illuminate\Http\Response
      */
-    public function edit(Post $post)
+    public function edit($id)
     {
-        return view("post.edit");
+        $data = Post::findOrFail($id);
+        return view("post.edit")->with(["post" =>$data]);
     }
 
     /**
@@ -68,9 +89,19 @@ class PostController extends Controller
      * @param  \App\post  $post
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, post $post)
+    public function update(Request $request, $id)
     {
-        //
+        //$data = $request->all();
+       // var_dump($data);
+       // die();
+        $data = $request->except('_token','_method');
+        if($request->hasFile('image')){
+            $post = Post::findOrFail($id);
+            Storage::delete("public/$post->image");
+            $data['image'] = $request->file('image')->store('uplpads','public');
+        }
+        Post::where('id','=',$id)->update($data);
+        return redirect()->route("post.index");
     }
 
     /**
@@ -79,8 +110,9 @@ class PostController extends Controller
      * @param  \App\post  $post
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Post $post)
+    public function destroy($id)
     {
-        //
+        Post::destroy($id);
+        return redirect()->route("post.index");
     }
 }
