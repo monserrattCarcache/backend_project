@@ -8,6 +8,16 @@
             <input type="text" class="form-control" id="title" name="title">
             <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
           </div>
+          <div class="form-group has-feedback">
+              <label class = "form-label">Categoria</label>
+              <select name="category_id" class="form-select" required>
+                  <option value="">Seleccione la categoria</option>
+                  @foreach($categories as $category)
+                        <option value ="{{ $category->id }}">{{ $category->name }}</option>
+                  @endforeach
+              </select>
+
+            </div>
           <div class="mb-3">
             <label for="image" class="form-label">Imagen</label>
             <input type="file" class="form-control" id="image" name="image">

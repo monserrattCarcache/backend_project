@@ -26,6 +26,7 @@
         <thead>
             <tr>
                 <th>{{"id"}}</th>
+                <th>{{"CATEGORIA"}}</th>
                 <th>{{"IMAGEN"}}></th>
                 <th>{{"title"}}</th>
                 <th>{{"Author"}}</th>
@@ -37,6 +38,7 @@
                 @foreach ($posts as $post)
                     <tr>
                         <td scope="row"> {{$post->id}}</td>
+                        <td scope="row"> {{$post->category->name}}</td>
                         <td scope="row"> <img src="{{ asset('storage').'/'.$post->image }}" alt="" width="100"></td>
                         <td>{{$post->title}}</td>
                         <td>{{$post->author}}</td>
