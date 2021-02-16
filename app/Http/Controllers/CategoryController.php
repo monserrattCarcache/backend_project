@@ -14,7 +14,16 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
+        $data['categories']=Category::paginate(5);
+        return view("category.index", $data);
+    }
+
+    public function search(Request $request){
+        $data = $request->input('search');
+        $query = Category::select()
+            ->where('name','like',"%$data%")
+            ->get();
+        return view("category.index")->with(["categories"=>$query]);
     }
 
     /**
@@ -24,7 +33,8 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        $categories = Category::all();
+        return view("category.create")->with(["categories"=>$categories]);
     }
 
     /**
@@ -35,7 +45,9 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->except('_token');
+        Category::insert($data);
+        return redirect()->route("category.index");
     }
 
     /**
@@ -57,7 +69,8 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        //
+        $data = Category::findOrFail($id);
+        return view("category.edit")->with(["category"=>$data]);
     }
 
     /**
@@ -69,7 +82,9 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        //
+        $data = $request->except('_token','_method');
+        Category::where('id','=',$id)->update($data);
+        return redirect()->route("category.index");
     }
 
     /**
@@ -80,6 +95,7 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        //
+        Category::destroy($id);
+        return redirect()->route("category.index");
     }
 }

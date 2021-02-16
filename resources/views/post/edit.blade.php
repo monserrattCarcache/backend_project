@@ -14,7 +14,7 @@
             <select name="category_id" class="form-select" required>
                 <option value="">Seleccione la categoria</option>
                 @foreach($categories as $category)
-                      <option value ="{{ $category->id }}" selected="{{ $task->id == $category->id }}" >{{ $category->name }}</option>
+                      <option value ="{{ $category->id }}" selected="{{ $post->category_id == $category->id }}" >{{ $category->name }}</option>
                 @endforeach
             </select>
 

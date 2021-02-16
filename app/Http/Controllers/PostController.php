@@ -83,7 +83,8 @@ class PostController extends Controller
     public function edit($id)
     {
         $data = Post::findOrFail($id);
-        return view("post.edit")->with(["post" =>$data]);
+        $categories = Category::all();
+        return view("post.edit")->with(["post" =>$data, "categories" => $categories]);
     }
 
     /**
