@@ -18,6 +18,12 @@ class CategoryController extends Controller
         return view("category.index", $data);
     }
 
+    public function list()
+    {
+        $data=Category::all();
+        return response()->json($data, 200);
+    }
+
     public function search(Request $request){
         $data = $request->input('search');
         $query = Category::select()
